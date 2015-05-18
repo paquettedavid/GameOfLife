@@ -1,0 +1,68 @@
+/* David Paquette
+ * 18 Nov 2013
+ * Program 8
+ */
+
+public class SmartEllipse extends java.awt.geom.Ellipse2D.Double {
+    private java.awt.Color _borderColor, _fillColor; // attributes
+    private int _rotation;
+    private final int STROKE_WIDTH = 2;
+
+    public SmartEllipse(java.awt.Color aColor){ 
+	_borderColor = aColor;
+	_fillColor = aColor; // solid color to start
+	_rotation = 0; // no rotation for now
+    }
+    
+    public SmartEllipse(){ 
+    	this(java.awt.Color.BLUE);
+
+        }
+ 
+    // methods not provided by Java
+    public void setBorderColor (java.awt.Color aColor) {
+	_borderColor = aColor;
+    }
+    public void setFillColor (java.awt.Color aColor) {
+	_fillColor = aColor;
+    }
+    public void setRotation (int aRotation) {
+	_rotation = aRotation;
+    }
+    
+    public java.awt.Color getColor(){
+    	return _fillColor;
+    }
+
+    // more readable versions of methods provided by Java
+    public void setLocation (double x, double y) {
+	this.setFrame (x, y, this.getWidth(), 
+		       this.getHeight());
+    }
+    public void setSize (int aWidth, int aHeight) {
+	this.setFrame(this.getX(), this.getY(), 
+		      aWidth, aHeight);
+    }
+    public void move (int aChangeInX, int aChangeInY) {
+	this.setFrame((int)this.getX()+aChangeInX,
+		      (int)this.getY()+aChangeInY,
+		      this.getWidth(),
+		      this.getHeight());
+    }
+
+    public void fill (java.awt.Graphics2D aBetterBrush){
+	java.awt.Color savedColor = aBetterBrush.getColor();
+	aBetterBrush.setColor(_fillColor);
+	aBetterBrush.fill(this); // paint a solid ellipse
+	aBetterBrush.setColor(savedColor);
+    }
+    public void draw (java.awt.Graphics2D aBrush) {
+	java.awt.Color savedColor = aBrush.getColor();
+	aBrush.setColor(_borderColor);
+	java.awt.Stroke savedStroke = aBrush.getStroke();
+	aBrush.setStroke(new java.awt.BasicStroke(STROKE_WIDTH));
+	aBrush.draw(this);
+	aBrush.setStroke(savedStroke);
+	aBrush.setColor(savedColor);
+    }
+}
